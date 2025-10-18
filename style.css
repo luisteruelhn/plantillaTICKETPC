@@ -13,9 +13,8 @@
   margin-bottom: 4px;
 }
 
-/* Imagen de la firma al 50% del ancho */
 .firma {
-  width: 10%;           /* Mitad del ancho del ticket */
+  width: 45%;
   display: block;
   margin: 6px auto;
   border: 1px solid #ccc;
@@ -23,6 +22,7 @@
   padding: 2px;
   background: #f9f9f9;
 }
+
 
 /* Texto de textoConforme */
 #TEXTOCONFORME {
