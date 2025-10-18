@@ -58,23 +58,39 @@
     </section>
   </div>
 
-  <script>
-    const params = new URLSearchParams(window.location.search);
-    const campos = [
-      "FECHA_RECEPCION","IDTALLERPC","IDxORDENPC",
-      "NOMBRECLIENTE","TELCLIENTE","DIRCLIENTE",
-      "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
-      "SERVICIOREQUERIDO","SERVICIOREALIZADO",
-      "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr"
-    ];
+<script>
+  const params = new URLSearchParams(window.location.search);
+  const campos = [
+    "FECHA_RECEPCION","IDTALLERPC","IDxORDENPC",
+    "NOMBRECLIENTE","TELCLIENTE","DIRCLIENTE",
+    "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
+    "SERVICIOREQUERIDO","SERVICIOREALIZADO",
+    "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr"
+  ];
 
-    campos.forEach(c => {
-      const valor = params.get(c);
-      if (valor) {
-        const el = document.getElementById(c);
-        if (el) el.textContent = decodeURIComponent(valor);
+  campos.forEach(c => {
+    const valor = params.get(c);
+    if (valor) {
+      const el = document.getElementById(c);
+      if (el) {
+        if (c === "_qr") {
+          el.src = decodeURIComponent(valor);   // aquí carga la imagen QR
+          el.alt = "QR del equipo";
+          el.style.display = "block";
+        } else if (c === "CONFORME") {
+          // Si CONFORME es una imagen, mostrarla
+          const imgFirma = document.getElementById("CONFORME_IMG");
+          if (imgFirma) {
+            imgFirma.src = decodeURIComponent(valor);
+            imgFirma.style.display = "block";
+          }
+        } else {
+          el.textContent = decodeURIComponent(valor);
+        }
       }
-    });
-  </script>
+    }
+  });
+</script>
+
 </body>
 </html>
