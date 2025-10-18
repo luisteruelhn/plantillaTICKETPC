@@ -24,11 +24,14 @@
       <p><strong>Tel:</strong> <span id="TELCLIENTE"></span></p>
       <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
       <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
+      
+      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
       <hr>
     </section>
 
     <section>
       <h3>DETALLE DEL EQUIPO</h3>
+      <p id="pwInfo" style="display:none;"><strong>PW:</strong> <span id="CLAVE"></span> (<span id="GARANTIA"></span>)</p>
       <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
       <p><strong>Marca:</strong> <span id="MARCA"></span></p>
       <hr>
@@ -70,7 +73,8 @@
     "NOMBRECLIENTE","TELCLIENTE","DIRCLIENTE",
     "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
     "SERVICIOREQUERIDO","SERVICIOREALIZADO",
-    "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr"
+    "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr",
+      "CLAVE","GARANTIA"
   ];
 
   campos.forEach(c => {
@@ -134,6 +138,9 @@ if (modo === "corto") {
   const pie = document.querySelector(".whatsapp");
   if (pie) pie.style.display = "none";
 }
+// Mostrar PW y Garantía en modo corto
+const pwInfo = document.getElementById("pwInfo");
+if (pwInfo) pwInfo.style.display = "block";
 
 </script>
 
