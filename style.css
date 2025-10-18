@@ -1,3 +1,12 @@
+/* LOGO A TODO EL ANCHO DEL TICKET */
+.logo-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto 5px auto;
+}
+
+
 .logo {
   width: 80px;
   display: block;
