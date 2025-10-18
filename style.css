@@ -1,3 +1,15 @@
+.firma {
+  width: 45%;
+  display: block;
+  margin: 6px auto;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  padding: 2px;
+  background: #f9f9f9;
+}
+
+
+
 .qr-header {
   width: 85px;
   height: auto;
