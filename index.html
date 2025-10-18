@@ -81,20 +81,29 @@
           el.src = decodeURIComponent(valor);   // aquí carga la imagen QR
           el.alt = "QR del equipo";
           el.style.display = "block";
-        } else if (c === "CONFORME") {
-          // Si CONFORME es una imagen, mostrarla
-          const imgFirma = document.getElementById("CONFORME_IMG");
-          if (imgFirma) {
-            imgFirma.src = decodeURIComponent(valor);
-            imgFirma.style.display = "block";
-          }
         } else {
           el.textContent = decodeURIComponent(valor);
         }
       }
     }
   });
+
+  // Mostrar u ocultar la sección de firma solo si CONFORME tiene valor
+  const firmaURL = params.get("CONFORME");
+  if (firmaURL) {
+    const imgFirma = document.getElementById("CONFORME_IMG");
+    if (imgFirma) {
+      imgFirma.src = decodeURIComponent(firmaURL);
+      imgFirma.style.display = "block";
+    }
+    const seccion = document.getElementById("seccionConforme");
+    if (seccion) seccion.style.display = "block";
+  } else {
+    const seccion = document.getElementById("seccionConforme");
+    if (seccion) seccion.style.display = "none";
+  }
 </script>
+
 
 </body>
 </html>
