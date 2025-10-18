@@ -14,13 +14,15 @@
 }
 
 .firma {
-  width: 45%;
+  max-width: 45%;       /* Se ajusta a la mitad del ancho del ticket */
+  height: auto !important; /* Mantiene proporciones originales */
   display: block;
   margin: 6px auto;
   border: 1px solid #ccc;
   border-radius: 4px;
   padding: 2px;
   background: #f9f9f9;
+  object-fit: contain;   /* Evita deformación */
 }
 
 
