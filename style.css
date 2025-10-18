@@ -1,18 +1,25 @@
-/* Contenedor horizontal para nombre y teléfono */
-.cliente-linea {
+/* Contenedor general */
+.cliente-bloque {
+  width: 100%;
+  margin: 5px 0;
+}
+
+/* Primera línea: etiquetas Cliente / Tel */
+.cliente-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: bold;
+  text-transform: uppercase;
+  color: #000;
+  margin-bottom: 2px;
+}
+
+/* Segunda línea: datos reales (nombre y teléfono) */
+.cliente-datos {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 4px 0;
-}
-
-/* Asegurar que ambos textos queden parejos y legibles */
-.cliente-linea p {
-  margin: 0;
-  padding: 0;
-  font-size: 15px;
-  font-weight: bold;
-  color: #000;
 }
 
 
