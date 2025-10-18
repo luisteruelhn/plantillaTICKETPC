@@ -1,3 +1,11 @@
+
+.qr-header {
+  width: 60px;
+  height: auto;
+  display: block;
+  margin: 5px auto 0 auto;
+}
+
 /* QR con texto integrado (imagen completa) */
 .qr-full {
   width: 100%;
