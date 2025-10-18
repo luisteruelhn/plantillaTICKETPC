@@ -48,12 +48,12 @@
       <hr>
     </section>
 
-      <section id="seccionConforme" style="display:none;">
+      <section id="seccionConforme">
         <p><strong>Conforme:</strong></p>
-        <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma">
+        <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma" style="display:none;">
         <p id="TEXTOCONFORME"></p>
-        <hr>
       </section>
+
 
     <section class="whatsapp">
     <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTWHA.png" alt="QR WhatsApp" class="qr-full">
@@ -78,7 +78,7 @@
       const el = document.getElementById(c);
       if (el) {
         if (c === "_qr") {
-          el.src = decodeURIComponent(valor);   // aquí carga la imagen QR
+          el.src = decodeURIComponent(valor);
           el.alt = "QR del equipo";
           el.style.display = "block";
         } else {
@@ -88,19 +88,14 @@
     }
   });
 
-  // Mostrar u ocultar la sección de firma solo si CONFORME tiene valor
+  // Solo mostrar la firma si existe
   const firmaURL = params.get("CONFORME");
-  if (firmaURL) {
-    const imgFirma = document.getElementById("CONFORME_IMG");
-    if (imgFirma) {
-      imgFirma.src = decodeURIComponent(firmaURL);
-      imgFirma.style.display = "block";
-    }
-    const seccion = document.getElementById("seccionConforme");
-    if (seccion) seccion.style.display = "block";
-  } else {
-    const seccion = document.getElementById("seccionConforme");
-    if (seccion) seccion.style.display = "none";
+  const imgFirma = document.getElementById("CONFORME_IMG");
+  if (firmaURL && imgFirma) {
+    imgFirma.src = decodeURIComponent(firmaURL);
+    imgFirma.style.display = "block";
+  } else if (imgFirma) {
+    imgFirma.style.display = "none"; // oculta solo la imagen
   }
 </script>
 
