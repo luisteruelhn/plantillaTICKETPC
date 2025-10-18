@@ -15,7 +15,7 @@
 
 /* Imagen de la firma al 50% del ancho */
 .firma {
-  width: 45%;           /* Mitad del ancho del ticket */
+  width: 10%;           /* Mitad del ancho del ticket */
   display: block;
   margin: 6px auto;
   border: 1px solid #ccc;
