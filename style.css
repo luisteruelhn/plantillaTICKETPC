@@ -14,17 +14,17 @@
 }
 
 .firma {
-  max-width: 45%;
+  max-width: 45%;          /* Mitad del ancho del ticket */
   height: auto !important;
   display: block;
   margin: 6px auto;
-  border: none;
-  padding: 0;
-  background: #fff;
+  border: 1px solid #999;  /* Borde fino gris */
+  border-radius: 4px;      /* Esquinas suaves */
+  padding: 3px;            /* Espacio interno */
+  background: #fff;        /* Fondo blanco limpio */
   object-fit: contain;
-  mask-image: linear-gradient(white 15%, transparent 90%);
-  -webkit-mask-image: linear-gradient(white 15%, transparent 90%);
 }
+
 
 
 
