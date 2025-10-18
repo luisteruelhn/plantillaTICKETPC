@@ -24,12 +24,16 @@
 
 
 /* Aumentar tamaño del nombre y teléfono */
-#NOMBRECLIENTE, #TELCLIENTE {
+ #TELCLIENTE {
+  font-size: 25px;
+  font-weight: bold;
+  color: #000;
+}
+#NOMBRECLIENTE  {
   font-size: 20px;
   font-weight: bold;
   color: #000;
 }
-
 
 
 /* Bloque completo de la sección de firma */
