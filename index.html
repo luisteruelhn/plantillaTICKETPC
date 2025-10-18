@@ -111,6 +111,30 @@
       imgFirma.style.display = "none";
     }
   }
+
+  // --- Control de modo de impresión ---
+const modo = params.get("modo");
+
+if (modo === "corto") {
+  // Oculta secciones que no deben verse en el ticket corto
+  const ocultar = [
+    "SERVICIOREALIZADO", // texto largo del trabajo
+    "CONFORME_IMG",
+    "TEXTOCONFORME",
+    "seccionConforme",
+    "qr-full",            // QR de WhatsApp
+  ];
+
+  ocultar.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  });
+
+  // También puedes ocultar el pie de página si existe
+  const pie = document.querySelector(".whatsapp");
+  if (pie) pie.style.display = "none";
+}
+
 </script>
 
 
