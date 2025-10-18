@@ -1,6 +1,6 @@
 /* Aumentar tamaño del nombre y teléfono */
 #NOMBRECLIENTE, #TELCLIENTE {
-  font-size: 15px;
+  font-size: 20px;
   font-weight: bold;
   color: #000;
 }
