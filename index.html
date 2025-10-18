@@ -2,69 +2,75 @@
 <html lang="es">
 <head>
   <meta charset="utf-8">
-  <title>ORDEN DE VENTA</title>
+  <title>TICKET TALLER TYT SYSTEMS</title>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://luisteruelhn.github.io/PLANTILLA/style.css">
+  <link rel="stylesheet" href="https://luisteruelhn.github.io/plantillaTICKETPC/style.css">
 </head>
 
 <body>
-  <header>
-    <h1>ORDEN DE VENTA</h1>
-    <address>
-      <p>TYT System's</p>
-      <p>Santa Bárbara, Honduras</p>
-      <p>Tel. 9517-4747</p>
-    </address>
-    <div style="float: right;">
-      <img src="https://luisteruelhn.github.io/PLANTILLA/logo.png" alt="logo" style="width:100px;">
-    </div>
-  </header>
+  <div class="ticket">
+    <header>
+      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/logo.png" alt="logo" class="logo">
+      <h2>TYT SYSTEMS</h2>
+      <p>Soporte Técnico Profesional<br>
+      Barrio el Farolito, Santa Bárbara, S.B.<br>
+      Tel: +504 9517-4747</p>
+      <hr>
+    </header>
 
-  <article>
-    <table class="meta">
-      <tr><th>ID Orden</th><td><span id="idORDENVENTAS"></span></td></tr>
-      <tr><th>ID Venta</th><td><span id="idventas"></span></td></tr>
-      <tr><th>Estado</th><td><span id="ESTADO"></span></td></tr>
-      <tr><th>Total</th><td>L <span id="TOTAL"></span></td></tr>
-    </table>
+    <section class="datos">
+      <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
+      <p><strong>ID Taller:</strong> <span id="IDTALLERPC"></span></p>
+      <p><strong>Orden:</strong> <span id="IDxORDENPC"></span></p>
+      <hr>
+      <p><strong>Cliente:</strong> <span id="NOMBRECLIENTE"></span></p>
+      <p><strong>Tel:</strong> <span id="TELCLIENTE"></span></p>
+      <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
+      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
+      <hr>
+    </section>
 
-    <h3>Detalles del Producto</h3>
-    <table class="inventory">
-      <thead>
-        <tr>
-          <th>Categoría</th>
-          <th>Nombre</th>
-          <th>Cantidad</th>
-          <th>Precio</th>
-          <th>Subtotal</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <td id="CATEGORIA"></td>
-          <td id="NOMBRE"></td>
-          <td id="CANTIDAD" style="text-align:center;"></td>
-          <td id="PRECIO" style="text-align:right;"></td>
-          <td id="SUBTOTAL" style="text-align:right;"></td>
-        </tr>
-      </tbody>
-    </table>
+    <section>
+      <h3>DETALLE DEL EQUIPO</h3>
+      <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
+      <p><strong>Marca:</strong> <span id="MARCA"></span></p>
+      <hr>
+      <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
+      <p><strong>Extra:</strong> <span id="INFO1"></span></p>
+      <hr>
+    </section>
 
-    <table class="balance">
-      <tr><th>Total</th><td>L <span id="TOTAL2"></span></td></tr>
-    </table>
-  </article>
+    <section>
+      <h3>SERVICIO REQUERIDO</h3>
+      <p><span id="SERVICIOREQUERIDO"></span></p>
+      <h3>TRABAJO REALIZADO</h3>
+      <p><span id="SERVICIOREALIZADO"></span></p>
+      <hr>
+      <p><strong>Estado:</strong> <span id="ESTADO"></span></p>
+      <p><strong>Costo LPS:</strong> <span id="COSTOLPS"></span></p>
+      <hr>
+    </section>
 
-  <aside>
-    <h1>Notas</h1>
-    <p>Gracias por su compra. ¡Vuelva pronto!</p>
-  </aside>
+    <section>
+      <p><strong>Conforme:</strong> <span id="CONFORME"></span></p>
+      <p><span id="TEXTOCONFORME"></span></p>
+      <hr>
+      <p>Escanee el código para acceder a <strong>WhatsApp</strong></p>
+      <div class="whatsapp">
+        <img src="https://luisteruelhn.github.io/plantillaTICKETPC/qr.png" alt="QR WhatsApp" class="qr">
+        <p class="num">9517-4747</p>
+      </div>
+    </section>
+  </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const campos = [
-      "idORDENVENTAS", "CATEGORIA", "NOMBRE", "CANTIDAD",
-      "PRECIO", "TOTAL", "ESTADO", "idventas"
+      "FECHA_RECEPCION","IDTALLERPC","IDxORDENPC",
+      "NOMBRECLIENTE","TELCLIENTE","DIRCLIENTE",
+      "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
+      "SERVICIOREQUERIDO","SERVICIOREALIZADO",
+      "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME"
     ];
 
     campos.forEach(c => {
@@ -74,14 +80,6 @@
         if (el) el.textContent = decodeURIComponent(valor);
       }
     });
-
-    // Calcular subtotal si no viene directamente
-    const cant = parseFloat(params.get("CANTIDAD") || 0);
-    const precio = parseFloat(params.get("PRECIO") || 0);
-    const subtotal = cant * precio;
-    document.getElementById("SUBTOTAL").textContent = subtotal.toFixed(2);
-    document.getElementById("TOTAL2").textContent = params.get("TOTAL") || subtotal.toFixed(2);
   </script>
 </body>
 </html>
-
