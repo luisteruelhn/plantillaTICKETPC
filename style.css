@@ -1,5 +1,21 @@
+/* Bloque completo de la sección de firma */
+#seccionConforme {
+  text-align: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+/* Texto "Conforme:" centrado */
+#seccionConforme p strong {
+  display: inline-block;
+  font-size: 13px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+/* Imagen de la firma al 50% del ancho */
 .firma {
-  width: 45%;
+  width: 45%;           /* Mitad del ancho del ticket */
   display: block;
   margin: 6px auto;
   border: 1px solid #ccc;
@@ -7,6 +23,14 @@
   padding: 2px;
   background: #f9f9f9;
 }
+
+/* Texto de textoConforme */
+#TEXTOCONFORME {
+  text-align: justify;
+  font-size: 11.5px;
+  margin-top: 6px;
+}
+
 
 
 
