@@ -1,3 +1,12 @@
+/* QR con texto integrado (imagen completa) */
+.qr-full {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin: 8px auto 0 auto;
+}
+
+
 body {
   font-family: "Arial", sans-serif;
   background: #fff;
