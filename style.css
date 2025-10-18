@@ -1,3 +1,12 @@
+/* Aumentar tamaño del nombre y teléfono */
+#NOMBRECLIENTE, #TELCLIENTE {
+  font-size: 15px;
+  font-weight: bold;
+  color: #000;
+}
+
+
+
 /* Bloque completo de la sección de firma */
 #seccionConforme {
   text-align: center;
