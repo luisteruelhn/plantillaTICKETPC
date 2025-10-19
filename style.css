@@ -1,3 +1,29 @@
+/* Estado y Costo en una sola línea compacta */
+.estado-costo {
+  display: flex;
+  justify-content: space-between; /* Estado izquierda, Costo derecha */
+  align-items: center;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  line-height: 1.1;
+}
+
+.estado-costo span {
+  display: inline-block;
+  margin: 0;
+  padding: 0;
+}
+
+#ESTADO, #COSTOLPS {
+  font-weight: 700;
+  margin: 0;
+  padding: 0;
+}
+
+
+
 /* =============================
    BLOQUE CLIENTE
    ============================= */
