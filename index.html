@@ -72,7 +72,6 @@
 
   
   </div>
-
 <script>
   const params = new URLSearchParams(window.location.search);
   const campos = [
@@ -94,6 +93,7 @@
           el.src = decodeURIComponent(valor);
           el.alt = "QR del equipo";
           el.style.display = "block";
+
         } else if (c === "COSTOLPS") {
           // 👉 Formatear costo con dos decimales
           const num = parseFloat(valor);
@@ -102,8 +102,27 @@
           } else {
             el.textContent = decodeURIComponent(valor);
           }
+
         } else {
-          el.textContent = decodeURIComponent(valor);
+          let texto = decodeURIComponent(valor);
+
+          // 👉 Formatear número de teléfono (99 89-97 41)
+          if (c === "TELCLIENTE") {
+            const soloDigitos = texto.replace(/\D/g, ""); // eliminar no numéricos
+            if (soloDigitos.length === 8) {
+              texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
+            }
+            // Agregar ícono 📞 visible solo en pantalla
+            const icono = document.createElement("span");
+            icono.textContent = "📞 ";
+            icono.style.fontSize = "15px";
+            icono.classList.add("no-print"); // clase para ocultar en impresión
+            el.textContent = ""; // limpiar contenido previo
+            el.appendChild(icono);
+            el.appendChild(document.createTextNode(texto));
+          } else {
+            el.textContent = texto;
+          }
         }
       }
     }
@@ -159,6 +178,8 @@
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 </script>
+
+
 
 
 
