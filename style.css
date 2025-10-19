@@ -30,7 +30,7 @@
 
 /* Bloque general */
 .cliente-bloque {
-  margin: 4px 0 6px 0; /* reducido */
+  margin: 4px 0 8px 0; /* reducido */
 }
 
 /* Etiqueta "Cliente:" */
@@ -55,13 +55,12 @@
   color: #000;
 }
 .cliente-tel {
-  text-align: right;
-  width: 100%;
+  display: flex;
+  justify-content: flex-end;  /* 👉 Alinea a la derecha */
+  align-items: baseline;
+  gap: 3px;                   /* pequeña separación entre “Tel:” y número */
   margin: 0;
   padding: 0;
-  font-size: 15px;
-  font-weight: bold;
-  color: #000;
   line-height: 1.1;
 }
 .cliente-tel strong {
