@@ -1,3 +1,72 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>TICKET TALLER TYT SYSTEMS</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://luisteruelhn.github.io/plantillaTICKETPC/style.css">
+</head>
+
+<body>
+  <div class="ticket">
+    <header>
+      <img id="_qr" alt="QR del equipo" class="qr-header">
+      <br> 
+      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTLOGO.png" alt="TYT SYSTEMS" class="logo-full">
+    </header>
+    
+    <section class="datos">
+      <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
+      <p><strong>ID Taller:</strong> <span id="IDxORDENPC"></span></p>
+      <hr>
+    <div class="cliente-bloque">
+      <p class="cliente-label"><strong>Cliente:</strong></p>
+      <p id="NOMBRECLIENTE"></p>
+      <p class="cliente-tel"><strong>Tel:</strong> <span id="TELCLIENTE"></span></p>
+    </div>
+      
+      <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
+      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
+     
+    </section>
+
+    <section>
+      <h3>DETALLE DEL EQUIPO</h3>
+      <p id="pwInfo" style="display:none;"><strong>PW:</strong> <span id="CLAVE"></span> (<span id="GARANTIA"></span>)</p>
+      <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
+      <p><strong>Marca:</strong> <span id="MARCA"></span></p>
+      
+      <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
+      <p><strong>Extra:</strong> <span id="INFO1"></span></p>
+     
+    </section>
+
+    <section>
+      <h3>SERVICIO REQUERIDO</h3>
+      <p><span id="SERVICIOREQUERIDO"></span></p>
+      <h3>TRABAJO REALIZADO</h3>
+      <p><span id="SERVICIOREALIZADO"></span></p>
+       
+      <p><strong>Estado:</strong> <span id="ESTADO"></span></p>
+      <p><strong>Costo LPS:</strong> <span id="COSTOLPS"></span></p>
+             <hr>
+    </section>
+
+<section id="seccionConforme">
+  <p><strong>Conforme:</strong></p>
+  <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma" style="display:none;">
+  <p id="TEXTOCONFORME"></p>
+</section>
+
+
+
+    <section class="whatsapp">
+    <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTWHA.png" alt="QR WhatsApp" class="qr-full">
+    </section>
+
+  
+  </div>
+
 <script>
   const params = new URLSearchParams(window.location.search);
   const campos = [
@@ -84,3 +153,8 @@
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 </script>
+
+
+
+</body>
+</html>
