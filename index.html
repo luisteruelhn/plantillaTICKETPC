@@ -72,6 +72,7 @@
 
   
   </div>
+
 <script>
   const params = new URLSearchParams(window.location.search);
   const campos = [
@@ -108,18 +109,23 @@
 
           // 👉 Formatear número de teléfono (99 89-97 41)
           if (c === "TELCLIENTE") {
-            const soloDigitos = texto.replace(/\D/g, ""); // eliminar no numéricos
+            const soloDigitos = texto.replace(/\D/g, "");
             if (soloDigitos.length === 8) {
               texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
             }
-            // Agregar ícono 📞 visible solo en pantalla
+
+            // Crear el ícono negro 📞
             const icono = document.createElement("span");
             icono.textContent = "📞 ";
             icono.style.fontSize = "15px";
-            icono.classList.add("no-print"); // clase para ocultar en impresión
-            el.textContent = ""; // limpiar contenido previo
+            icono.style.color = "#000"; // negro
+            icono.style.marginRight = "3px";
+
+            // Mostrar Teléfono con ícono
+            el.textContent = "";
             el.appendChild(icono);
             el.appendChild(document.createTextNode(texto));
+
           } else {
             el.textContent = texto;
           }
@@ -157,11 +163,11 @@
   if (modo === "corto") {
     // Oculta secciones que no deben verse en el ticket corto
     const ocultar = [
-      "SERVICIOREALIZADO", // texto largo del trabajo
+      "SERVICIOREALIZADO",
       "CONFORME_IMG",
       "TEXTOCONFORME",
       "seccionConforme",
-      "qr-full" // QR de WhatsApp
+      "qr-full"
     ];
 
     ocultar.forEach(id => {
@@ -169,7 +175,6 @@
       if (el) el.style.display = "none";
     });
 
-    // También puedes ocultar el pie de página si existe
     const pie = document.querySelector(".whatsapp");
     if (pie) pie.style.display = "none";
   }
@@ -178,7 +183,6 @@
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 </script>
-
 
 
 
