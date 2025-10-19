@@ -1,72 +1,3 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-  <meta charset="utf-8">
-  <title>TICKET TALLER TYT SYSTEMS</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://luisteruelhn.github.io/plantillaTICKETPC/style.css">
-</head>
-
-<body>
-  <div class="ticket">
-    <header>
-      <img id="_qr" alt="QR del equipo" class="qr-header">
-      <br> 
-      <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTLOGO.png" alt="TYT SYSTEMS" class="logo-full">
-    </header>
-    
-    <section class="datos">
-      <p><strong>Fecha:</strong> <span id="FECHA_RECEPCION"></span></p>
-      <p><strong>ID Taller:</strong> <span id="IDxORDENPC"></span></p>
-      <hr>
-<div class="cliente-bloque">
-  <p class="cliente-label"><strong>Cliente:</strong></p>
-  <p id="NOMBRECLIENTE"></p>
-  <p class="cliente-tel"><strong>Tel:</strong> <span id="TELCLIENTE"></span></p>
-</div>
-      
-      <p><strong>Dirección:</strong> <span id="DIRCLIENTE"></span></p>
-      <p><em>Recibido por:</em> <span id="RECIBIDO_POR"></span></p>
-     
-    </section>
-
-    <section>
-      <h3>DETALLE DEL EQUIPO</h3>
-      <p id="pwInfo" style="display:none;"><strong>PW:</strong> <span id="CLAVE"></span> (<span id="GARANTIA"></span>)</p>
-      <p><strong>Equipo:</strong> <span id="EQUIPOX"></span></p>
-      <p><strong>Marca:</strong> <span id="MARCA"></span></p>
-      
-      <p><strong>Información adicional:</strong> <span id="INFO2"></span></p>
-      <p><strong>Extra:</strong> <span id="INFO1"></span></p>
-     
-    </section>
-
-    <section>
-      <h3>SERVICIO REQUERIDO</h3>
-      <p><span id="SERVICIOREQUERIDO"></span></p>
-      <h3>TRABAJO REALIZADO</h3>
-      <p><span id="SERVICIOREALIZADO"></span></p>
-       
-      <p><strong>Estado:</strong> <span id="ESTADO"></span></p>
-      <p><strong>Costo LPS:</strong> <span id="COSTOLPS"></span></p>
-       
-    </section>
-
-<section id="seccionConforme">
-  <p><strong>Conforme:</strong></p>
-  <img id="CONFORME_IMG" alt="Firma de conformidad" class="firma" style="display:none;">
-  <p id="TEXTOCONFORME"></p>
-</section>
-
-
-
-    <section class="whatsapp">
-    <img src="https://luisteruelhn.github.io/plantillaTICKETPC/TYTWHA.png" alt="QR WhatsApp" class="qr-full">
-    </section>
-
-  
-  </div>
-
 <script>
   const params = new URLSearchParams(window.location.search);
   const campos = [
@@ -75,7 +6,7 @@
     "RECIBIDO_POR","EQUIPOX","MARCA","INFO1","INFO2",
     "SERVICIOREQUERIDO","SERVICIOREALIZADO",
     "ESTADO","COSTOLPS","CONFORME","TEXTOCONFORME","_qr",
-      "CLAVE","GARANTIA"
+    "CLAVE","GARANTIA"
   ];
 
   campos.forEach(c => {
@@ -84,9 +15,18 @@
       const el = document.getElementById(c);
       if (el) {
         if (c === "_qr") {
-          el.src = decodeURIComponent(valor);   // Carga el QR dinámico
+          // Cargar imagen QR dinámica
+          el.src = decodeURIComponent(valor);
           el.alt = "QR del equipo";
           el.style.display = "block";
+        } else if (c === "COSTOLPS") {
+          // 👉 Formatear costo con dos decimales
+          const num = parseFloat(valor);
+          if (!isNaN(num)) {
+            el.textContent = num.toFixed(2); // 100 → 100.00
+          } else {
+            el.textContent = decodeURIComponent(valor);
+          }
         } else {
           el.textContent = decodeURIComponent(valor);
         }
@@ -118,33 +58,29 @@
   }
 
   // --- Control de modo de impresión ---
-const modo = params.get("modo");
+  const modo = params.get("modo");
 
-if (modo === "corto") {
-  // Oculta secciones que no deben verse en el ticket corto
-  const ocultar = [
-    "SERVICIOREALIZADO", // texto largo del trabajo
-    "CONFORME_IMG",
-    "TEXTOCONFORME",
-    "seccionConforme",
-    "qr-full",            // QR de WhatsApp
-  ];
+  if (modo === "corto") {
+    // Oculta secciones que no deben verse en el ticket corto
+    const ocultar = [
+      "SERVICIOREALIZADO", // texto largo del trabajo
+      "CONFORME_IMG",
+      "TEXTOCONFORME",
+      "seccionConforme",
+      "qr-full" // QR de WhatsApp
+    ];
 
-  ocultar.forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.style.display = "none";
-  });
+    ocultar.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
 
-  // También puedes ocultar el pie de página si existe
-  const pie = document.querySelector(".whatsapp");
-  if (pie) pie.style.display = "none";
-}
-// Mostrar PW y Garantía en modo corto
-const pwInfo = document.getElementById("pwInfo");
-if (pwInfo) pwInfo.style.display = "block";
+    // También puedes ocultar el pie de página si existe
+    const pie = document.querySelector(".whatsapp");
+    if (pie) pie.style.display = "none";
+  }
 
+  // --- Mostrar PW y Garantía en modo corto ---
+  const pwInfo = document.getElementById("pwInfo");
+  if (pwInfo) pwInfo.style.display = "block";
 </script>
-
-
-</body>
-</html>
