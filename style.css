@@ -251,6 +251,9 @@ hr {
 /* =============================
    MODO IMPRESIÓN
    ============================= */
+/* =============================
+   MODO IMPRESIÓN
+   ============================= */
 @media print {
   html, body {
     width: 80mm;
@@ -281,5 +284,9 @@ hr {
   .whatsapp {
     page-break-inside: avoid;
   }
-}
 
+  /* 👉 Ocultar elementos de pantalla (como el ícono 📞) */
+  .no-print {
+    display: none !important;
+  }
+}
