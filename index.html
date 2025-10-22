@@ -143,13 +143,15 @@
       let firmaURL = decodeURIComponent(firmaParam);
 
       // Si la URL es una ruta interna de AppSheet, convertirla en una URL pública
-      if (firmaURL.startsWith("PC_Images/")) {
-        firmaURL =
-          "https://www.appsheet.com/template/gettablefileurl?" +
-          "appName=TYTOneDBA-909404411" +
-          "&tableName=PC" +
-          "&fileName=" + encodeURIComponent(firmaURL);
-      }
+        if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
+          let tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
+        
+          firmaURL =
+            "https://www.appsheet.com/template/gettablefileurl?" +
+            "appName=TYTOneDBA-909404411" +
+            "&tableName=" + tabla +
+            "&fileName=" + encodeURIComponent(firmaURL);
+        }
 
       imgFirma.src = firmaURL;
       imgFirma.style.display = "block";
