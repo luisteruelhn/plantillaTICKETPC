@@ -250,49 +250,36 @@ hr {
 
 
 /* =============================
-   MODO IMPRESIÓN
-   ============================= */
-/* =============================
-   MODO IMPRESIÓN
+   CORRECCIÓN DE IMPRESIÓN
    ============================= */
 @media print {
-  html, body {
-    width: 80mm;
-    max-width: 80mm;
-    background: none;
-    margin: 0;
-    padding: 0;
-  }
-  body {
-    display: block;
-  }
-  .ticket {
-    width: 80mm;
-    box-shadow: none;
-    margin: 0;
-    padding: 0 4px;
+  /* fuerza a que se impriman colores de fondo */
+  * {
+    -webkit-print-color-adjust: exact !important;
+    color-adjust: exact !important;
   }
 
+  /* mejora contraste general en papel térmico */
+  body, p, span, td, div {
+    font-weight: 600 !important;
+  }
 
+  /* hace que los títulos negros sí impriman el fondo */
   h3 {
-    margin-top: 3px;
-    margin-bottom: 1px;
-
-
-  }
-  p {
-    margin: 1px 0;
-  }
-  hr {
-    margin: 1px 0;
-  }
-  .whatsapp {
-    page-break-inside: avoid;
+    background: #000 !important;
+    color: #fff !important;
+    -webkit-print-color-adjust: exact !important;
+    padding: 3px;
   }
 
-  /* 👉 Ocultar elementos de pantalla (como el ícono 📞) */
-  .no-print {
-    display: none !important;
+  /* Evita que Chrome quite el negro de fondo */
+  .ticket {
+    background: #fff !important;
+  }
 
+  /* Mantener texto nítido en impresoras térmicas */
+  p, span, td {
+    -webkit-font-smoothing: none !important;
+    font-smooth: never !important;
   }
 }
