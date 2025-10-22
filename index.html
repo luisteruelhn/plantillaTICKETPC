@@ -90,30 +90,41 @@
       const el = document.getElementById(c);
       if (el) {
         if (c === "_qr") {
+          // Cargar imagen QR dinámica
           el.src = decodeURIComponent(valor);
           el.alt = "QR del equipo";
           el.style.display = "block";
 
         } else if (c === "COSTOLPS") {
+          // 👉 Formatear costo con dos decimales
           const num = parseFloat(valor);
-          el.textContent = !isNaN(num) ? num.toFixed(2) : decodeURIComponent(valor);
+          if (!isNaN(num)) {
+            el.textContent = num.toFixed(2);
+          } else {
+            el.textContent = decodeURIComponent(valor);
+          }
 
         } else {
           let texto = decodeURIComponent(valor);
 
+          // 👉 Formatear número de teléfono (99 89-97 41)
           if (c === "TELCLIENTE") {
             const soloDigitos = texto.replace(/\D/g, "");
             if (soloDigitos.length === 8) {
               texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
             }
+
+            // Crear el ícono ✆ negro grande
             const icono = document.createElement("span");
-            icono.innerHTML = "&#9990;&nbsp;";
+            icono.innerHTML = "&#9990;&nbsp;"; // ✆ símbolo plano negro
             icono.style.fontSize = "25px";
             icono.style.color = "#000";
             icono.style.marginRight = "3px";
+
             el.textContent = "";
             el.appendChild(icono);
             el.appendChild(document.createTextNode(texto));
+
           } else {
             el.textContent = texto;
           }
@@ -122,12 +133,14 @@
     }
   });
 
-  // --- Mostrar firma (CONFORME) ---
+  // --- Mostrar la firma (CONFORME) solo si existe ---
   const firmaParam = params.get("CONFORME");
   const imgFirma = document.getElementById("CONFORME_IMG");
   if (imgFirma) {
     if (firmaParam && firmaParam.trim() !== "") {
       let firmaURL = decodeURIComponent(firmaParam);
+
+      // Si la URL es una ruta interna de AppSheet, convertirla en una URL pública
       if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
         let tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
         firmaURL =
@@ -136,6 +149,7 @@
           "&tableName=" + tabla +
           "&fileName=" + encodeURIComponent(firmaURL);
       }
+
       imgFirma.src = firmaURL;
       imgFirma.style.display = "block";
     } else {
@@ -143,50 +157,57 @@
     }
   }
 
-  // --- Control de modo corto ---
+  // --- Control de modo de impresión (para ticket corto) ---
   const modo = params.get("modo");
   if (modo === "corto") {
-    ["SERVICIOREALIZADO","CONFORME_IMG","TEXTOCONFORME","seccionConforme","qr-full"]
-      .forEach(id => { const el = document.getElementById(id); if (el) el.style.display = "none"; });
+    const ocultar = [
+      "SERVICIOREALIZADO",
+      "CONFORME_IMG",
+      "TEXTOCONFORME",
+      "seccionConforme",
+      "qr-full"
+    ];
+    ocultar.forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.style.display = "none";
+    });
     const pie = document.querySelector(".whatsapp");
     if (pie) pie.style.display = "none";
   }
 
+  // --- Mostrar PW y Garantía ---
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 
-  // --- 🖨️ RAWBT + cierre automático ---
+  // --- 🖨️ Control de impresión (solo si print=1) ---
   window.addEventListener("load", () => {
-    const printMode = params.get("print");
+    const printMode = params.get("print"); // ← nuevo parámetro
     if (printMode === "1") {
       setTimeout(() => {
         try {
           const esAndroid = /Android/i.test(navigator.userAgent);
           if (esAndroid) {
+            // Intentar abrir RawBT
             const rawbtIntent = "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
             const iframe = document.createElement("iframe");
             iframe.style.display = "none";
             iframe.src = rawbtIntent;
             document.body.appendChild(iframe);
-            // Si RawBT no responde, usar impresión normal y cerrar
-            setTimeout(() => {
-              window.print();
-              setTimeout(() => window.close(), 1500);
-            }, 1500);
+
+            // Si RawBT no responde, usar impresión normal
+            setTimeout(() => window.print(), 1500);
           } else {
+            // En PC o iOS, usar impresión normal
             window.print();
-            setTimeout(() => window.close(), 1500);
           }
         } catch (err) {
           console.error("Error al imprimir:", err);
-          window.print();
-          setTimeout(() => window.close(), 1500);
+          window.print(); // fallback garantizado
         }
-      }, 1000); // Espera 1s para que se cargue todo antes de imprimir
+      }, 1000); // esperar para cargar imágenes y QR
     }
   });
 </script>
-
 
 
 
