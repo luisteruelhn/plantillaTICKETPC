@@ -157,11 +157,9 @@
     }
   }
 
-  // --- Control de modo de impresión ---
+  // --- Control de modo de impresión (para ticket corto) ---
   const modo = params.get("modo");
-
   if (modo === "corto") {
-    // Ocultar secciones que no deben verse en el ticket corto
     const ocultar = [
       "SERVICIOREALIZADO",
       "CONFORME_IMG",
@@ -173,7 +171,6 @@
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
     });
-
     const pie = document.querySelector(".whatsapp");
     if (pie) pie.style.display = "none";
   }
@@ -182,35 +179,36 @@
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 
-  // --- 🖨️ IMPRESIÓN AUTOMÁTICA (RAWBT + fallback normal) ---
+  // --- 🖨️ Control de impresión (solo si print=1) ---
   window.addEventListener("load", () => {
-    setTimeout(() => {
-      try {
-        const esAndroid = /Android/i.test(navigator.userAgent);
+    const printMode = params.get("print"); // ← nuevo parámetro
+    if (printMode === "1") {
+      setTimeout(() => {
+        try {
+          const esAndroid = /Android/i.test(navigator.userAgent);
+          if (esAndroid) {
+            // Intentar abrir RawBT
+            const rawbtIntent = "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = rawbtIntent;
+            document.body.appendChild(iframe);
 
-        if (esAndroid) {
-          // Intentar abrir RawBT
-          const rawbtIntent = "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
-          const iframe = document.createElement("iframe");
-          iframe.style.display = "none";
-          iframe.src = rawbtIntent;
-          document.body.appendChild(iframe);
-
-          // Si RawBT no responde, fallback a impresión normal
-          setTimeout(() => {
+            // Si RawBT no responde, usar impresión normal
+            setTimeout(() => window.print(), 1500);
+          } else {
+            // En PC o iOS, usar impresión normal
             window.print();
-          }, 1500);
-        } else {
-          // En PC o iOS, imprimir normalmente
-          window.print();
+          }
+        } catch (err) {
+          console.error("Error al imprimir:", err);
+          window.print(); // fallback garantizado
         }
-      } catch (err) {
-        console.error("Error al intentar imprimir:", err);
-        window.print(); // fallback garantizado
-      }
-    }, 1000); // esperar que carguen imágenes y QR
+      }, 1000); // esperar para cargar imágenes y QR
+    }
   });
 </script>
+
 
 
 
