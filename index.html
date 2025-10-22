@@ -182,15 +182,33 @@
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 
-  // --- 🖨️ Imprimir automáticamente SIEMPRE ---
+  // --- 🖨️ IMPRESIÓN AUTOMÁTICA (RAWBT + fallback normal) ---
   window.addEventListener("load", () => {
     setTimeout(() => {
       try {
-        window.print(); // abre el cuadro de impresión
+        const esAndroid = /Android/i.test(navigator.userAgent);
+
+        if (esAndroid) {
+          // Intentar abrir RawBT
+          const rawbtIntent = "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+          const iframe = document.createElement("iframe");
+          iframe.style.display = "none";
+          iframe.src = rawbtIntent;
+          document.body.appendChild(iframe);
+
+          // Si RawBT no responde, fallback a impresión normal
+          setTimeout(() => {
+            window.print();
+          }, 1500);
+        } else {
+          // En PC o iOS, imprimir normalmente
+          window.print();
+        }
       } catch (err) {
-        console.error("No se pudo iniciar la impresión:", err);
+        console.error("Error al intentar imprimir:", err);
+        window.print(); // fallback garantizado
       }
-    }, 800); // espera para que cargue el QR y firma
+    }, 1000); // esperar que carguen imágenes y QR
   });
 </script>
 
