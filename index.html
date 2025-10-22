@@ -114,13 +114,12 @@
               texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
             }
 
-            // Crear el ícono negro 📞
-         const icono = document.createElement("span");
-             icono.innerHTML = "&#9990;&nbsp;"; // ✆ alternativo plano negro
-
-          icono.style.fontSize = "25px";
-          icono.style.color = "#000";
-          icono.style.marginRight = "3px";
+            // Crear el ícono negro ✆
+            const icono = document.createElement("span");
+            icono.innerHTML = "&#9990;&nbsp;"; // ✆ alternativo plano negro
+            icono.style.fontSize = "25px";
+            icono.style.color = "#000";
+            icono.style.marginRight = "3px";
 
             // Mostrar Teléfono con ícono
             el.textContent = "";
@@ -143,15 +142,14 @@
       let firmaURL = decodeURIComponent(firmaParam);
 
       // Si la URL es una ruta interna de AppSheet, convertirla en una URL pública
-        if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
-          let tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
-        
-          firmaURL =
-            "https://www.appsheet.com/template/gettablefileurl?" +
-            "appName=TYTOneDBA-909404411" +
-            "&tableName=" + tabla +
-            "&fileName=" + encodeURIComponent(firmaURL);
-        }
+      if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
+        let tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
+        firmaURL =
+          "https://www.appsheet.com/template/gettablefileurl?" +
+          "appName=TYTOneDBA-909404411" +
+          "&tableName=" + tabla +
+          "&fileName=" + encodeURIComponent(firmaURL);
+      }
 
       imgFirma.src = firmaURL;
       imgFirma.style.display = "block";
@@ -185,7 +183,22 @@
   // --- Mostrar PW y Garantía en modo corto ---
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
+
+  // --- 🖨️ Imprimir automáticamente si es modo corto ---
+  window.addEventListener("load", () => {
+    const modo = params.get("modo");
+    if (modo === "corto") {
+      setTimeout(() => {
+        try {
+          window.print();  // Abre el cuadro de impresión automáticamente
+        } catch (err) {
+          console.error("No se pudo iniciar la impresión:", err);
+        }
+      }, 800); // Espera 0.8s para que cargue todo antes de imprimir
+    }
+  });
 </script>
+
 
 
 
