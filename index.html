@@ -99,7 +99,7 @@
           // 👉 Formatear costo con dos decimales
           const num = parseFloat(valor);
           if (!isNaN(num)) {
-            el.textContent = num.toFixed(2); // 100 → 100.00
+            el.textContent = num.toFixed(2);
           } else {
             el.textContent = decodeURIComponent(valor);
           }
@@ -114,14 +114,13 @@
               texto = `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
             }
 
-            // Crear el ícono negro ✆
+            // Crear el ícono ✆ negro grande
             const icono = document.createElement("span");
-            icono.innerHTML = "&#9990;&nbsp;"; // ✆ alternativo plano negro
+            icono.innerHTML = "&#9990;&nbsp;"; // ✆ símbolo plano negro
             icono.style.fontSize = "25px";
             icono.style.color = "#000";
             icono.style.marginRight = "3px";
 
-            // Mostrar Teléfono con ícono
             el.textContent = "";
             el.appendChild(icono);
             el.appendChild(document.createTextNode(texto));
@@ -162,7 +161,7 @@
   const modo = params.get("modo");
 
   if (modo === "corto") {
-    // Oculta secciones que no deben verse en el ticket corto
+    // Ocultar secciones que no deben verse en el ticket corto
     const ocultar = [
       "SERVICIOREALIZADO",
       "CONFORME_IMG",
@@ -170,7 +169,6 @@
       "seccionConforme",
       "qr-full"
     ];
-
     ocultar.forEach(id => {
       const el = document.getElementById(id);
       if (el) el.style.display = "none";
@@ -180,22 +178,19 @@
     if (pie) pie.style.display = "none";
   }
 
-  // --- Mostrar PW y Garantía en modo corto ---
+  // --- Mostrar PW y Garantía ---
   const pwInfo = document.getElementById("pwInfo");
   if (pwInfo) pwInfo.style.display = "block";
 
-  // --- 🖨️ Imprimir automáticamente si es modo corto ---
+  // --- 🖨️ Imprimir automáticamente SIEMPRE ---
   window.addEventListener("load", () => {
-    const modo = params.get("modo");
-    if (modo === "corto") {
-      setTimeout(() => {
-        try {
-          window.print();  // Abre el cuadro de impresión automáticamente
-        } catch (err) {
-          console.error("No se pudo iniciar la impresión:", err);
-        }
-      }, 800); // Espera 0.8s para que cargue todo antes de imprimir
-    }
+    setTimeout(() => {
+      try {
+        window.print(); // abre el cuadro de impresión
+      } catch (err) {
+        console.error("No se pudo iniciar la impresión:", err);
+      }
+    }, 800); // espera para que cargue el QR y firma
   });
 </script>
 
