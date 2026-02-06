@@ -1,238 +1,225 @@
-/* Shivving (IE8 is not supported, but at least it won't look as awful)
-/* ========================================================================== */
+(function () {
+  const params = new URLSearchParams(window.location.search);
 
-(function (document) {
-	var
-	head = document.head = document.getElementsByTagName('head')[0] || document.documentElement,
-	elements = 'article aside audio bdi canvas data datalist details figcaption figure footer header hgroup mark meter nav output picture progress section summary time video x'.split(' '),
-	elementsLength = elements.length,
-	elementsIndex = 0,
-	element;
+  // ----------------------------
+  // Helpers
+  // ----------------------------
+  function getParam(name) {
+    const v = params.get(name);
+    return v ? decodeURIComponent(v) : "";
+  }
 
-	while (elementsIndex < elementsLength) {
-		element = document.createElement(elements[++elementsIndex]);
-	}
+  function setText(id, value) {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.textContent = value || "";
+  }
 
-	element.innerHTML = 'x<style>' +
-		'article,aside,details,figcaption,figure,footer,header,hgroup,nav,section{display:block}' +
-		'audio[controls],canvas,video{display:inline-block}' +
-		'[hidden],audio{display:none}' +
-		'mark{background:#FF0;color:#000}' +
-	'</style>';
+  function hideById(id) {
+    const el = document.getElementById(id);
+    if (el) el.style.display = "none";
+  }
 
-	return head.insertBefore(element.lastChild, head.firstChild);
-})(document);
+  function hideBySelector(sel) {
+    const el = document.querySelector(sel);
+    if (el) el.style.display = "none";
+  }
 
-/* Prototyping
-/* ========================================================================== */
+  function formatPhoneHN(texto) {
+    // Formato: 99 89-97 41 (si son 8 dígitos)
+    const soloDigitos = (texto || "").replace(/\D/g, "");
+    if (soloDigitos.length === 8) {
+      return `${soloDigitos.slice(0,2)} ${soloDigitos.slice(2,4)}-${soloDigitos.slice(4,6)} ${soloDigitos.slice(6)}`;
+    }
+    return texto || "";
+  }
 
-(function (window, ElementPrototype, ArrayPrototype, polyfill) {
-	function NodeList() { [polyfill] }
-	NodeList.prototype.length = ArrayPrototype.length;
+  function setTelefonoConIcono(id, telRaw) {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-	ElementPrototype.matchesSelector = ElementPrototype.matchesSelector ||
-	ElementPrototype.mozMatchesSelector ||
-	ElementPrototype.msMatchesSelector ||
-	ElementPrototype.oMatchesSelector ||
-	ElementPrototype.webkitMatchesSelector ||
-	function matchesSelector(selector) {
-		return ArrayPrototype.indexOf.call(this.parentNode.querySelectorAll(selector), this) > -1;
-	};
+    const tel = formatPhoneHN(telRaw);
 
-	ElementPrototype.ancestorQuerySelectorAll = ElementPrototype.ancestorQuerySelectorAll ||
-	ElementPrototype.mozAncestorQuerySelectorAll ||
-	ElementPrototype.msAncestorQuerySelectorAll ||
-	ElementPrototype.oAncestorQuerySelectorAll ||
-	ElementPrototype.webkitAncestorQuerySelectorAll ||
-	function ancestorQuerySelectorAll(selector) {
-		for (var cite = this, newNodeList = new NodeList; cite = cite.parentElement;) {
-			if (cite.matchesSelector(selector)) ArrayPrototype.push.call(newNodeList, cite);
-		}
+    // Icono ✆ negro grande
+    const icono = document.createElement("span");
+    icono.innerHTML = "&#9990;&nbsp;";
+    icono.style.fontSize = "25px";
+    icono.style.color = "#000";
+    icono.style.marginRight = "3px";
 
-		return newNodeList;
-	};
+    el.textContent = "";
+    el.appendChild(icono);
+    el.appendChild(document.createTextNode(tel));
+  }
 
-	ElementPrototype.ancestorQuerySelector = ElementPrototype.ancestorQuerySelector ||
-	ElementPrototype.mozAncestorQuerySelector ||
-	ElementPrototype.msAncestorQuerySelector ||
-	ElementPrototype.oAncestorQuerySelector ||
-	ElementPrototype.webkitAncestorQuerySelector ||
-	function ancestorQuerySelector(selector) {
-		return this.ancestorQuerySelectorAll(selector)[0] || null;
-	};
-})(this, Element.prototype, Array.prototype);
+  function setCostoFormateado(id, valorRaw) {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-/* Helper Functions
-/* ========================================================================== */
+    const num = parseFloat((valorRaw || "").toString().replace(",", "."));
+    if (!isNaN(num)) el.textContent = num.toFixed(2);
+    else el.textContent = valorRaw || "";
+  }
 
-function generateTableRow() {
-	var emptyColumn = document.createElement('tr');
+  function getTextoConformePorEstado(estado) {
+    // IMPORTANTE: aquí va la lógica que antes estaba en AppSheet
+    if ((estado || "").trim() === "D-ENTREGADO") {
+      return "El cliente o representante declara que ha recibido el equipo en perfectas condiciones y que ha sido probado y verificado su correcto funcionamiento al momento de la entrega. La empresa no se hace responsable por daños ocasionados durante el transporte posterior a la entrega. El cliente asume la responsabilidad de cualquier daño posterior y entiende que no se realizarán ajustes adicionales por problemas derivados de un manejo inadecuado del equipo. Este servicio de reparación cuenta con una garantía de 7 días, excluyendo daños causados por mal uso, caídas, líquidos, problemas eléctricos, daños causados por plagas, manipulaciones de cualquier tipo o transporte inadecuado.";
+    }
 
-	emptyColumn.innerHTML = '<td><a class="cut">-</a><span contenteditable></span></td>' +
-		'<td><span contenteditable></span></td>' +
-		'<td><span data-prefix>$</span><span contenteditable>0.00</span></td>' +
-		'<td><span contenteditable>0</span></td>' +
-		'<td><span data-prefix>$</span><span>0.00</span></td>';
+    return (
+      "CONDICIONES\n" +
+      "1. Todo equipo deberá ser RECLAMADO en un plazo no mayor de 90 DÍAS, a partir de la fecha de ingreso al taller, caso contrario será rematado para cubrir COSTOS DE REPARACIÓN y ALMACENAJE.\n" +
+      "2. A partir de los 15 días desde la fecha se generará un cargo por ALMACENAJE con un valor de CINCO Lempiras (L5,00) por día, el cual deberá ser abonado por el propietario juntamente con el retiro del equipo mencionado en este documento.\n" +
+      "3. En caso de solo hacerse DIAGNÓSTICO se cobrará L150.00 (ciento cincuenta Lempiras), CUANDO SEAN COMPUTADORAS, y L200.00 (doscientos Lempiras) en el caso de las IMPRESORAS.\n" +
+      "4. AL MOMENTO DE RECLAMAR EL EQUIPO ES OBLIGATORIO PRESENTAR ESTE RECIBO, CASO CONTRARIO NO SE ENTREGARÁ EL EQUIPO. Se da por entendido que el portador de este RECIBO está autorizado a RECLAMAR LA ENTREGA del equipo.\n" +
+      "\n" +
+      "Conforme.\n" +
+      "Es entendido que al dejar el equipo para su DIAGNÓSTICO o REPARACIÓN y tomar el RECIBO, ACEPTA las CONDICIONES arriba descritas en este DOCUMENTO."
+    );
+  }
 
-	return emptyColumn;
-}
+  function setTextoConSaltos(id, texto) {
+    const el = document.getElementById(id);
+    if (!el) return;
 
-function parseFloatHTML(element) {
-	return parseFloat(element.innerHTML.replace(/[^\d\.\-]+/g, '')) || 0;
-}
+    // Para conservar saltos de línea dentro del <p>
+    // Usamos textContent y forzamos white-space desde JS para no tocar tu CSS
+    el.style.whiteSpace = "pre-line";
+    el.textContent = texto || "";
+  }
 
-function parsePrice(number) {
-	return number.toFixed(2).replace(/(\d)(?=(\d\d\d)+([^\d]|$))/g, '$1,');
-}
+  // ----------------------------
+  // Cargar campos desde URL (SIN TEXTOCONFORME)
+  // ----------------------------
+  const fields = [
+    "FECHA_RECEPCION",
+    "IDTALLERPC",
+    "IDxORDENPC",
+    "NOMBRECLIENTE",
+    "TELCLIENTE",
+    "DIRCLIENTE",
+    "RECIBIDO_POR",
+    "EQUIPOX",
+    "MARCA",
+    "INFO1",
+    "INFO2",
+    "SERVICIOREQUERIDO",
+    "SERVICIOREALIZADO",
+    "ESTADO",
+    "COSTOLPS",
+    "CONFORME",
+    "_qr",
+    "CLAVE",
+    "GARANTIA"
+  ];
 
-/* Update Number
-/* ========================================================================== */
+  fields.forEach((c) => {
+    const valor = getParam(c);
+    if (!valor) return;
 
-function updateNumber(e) {
-	var
-	activeElement = document.activeElement,
-	value = parseFloat(activeElement.innerHTML),
-	wasPrice = activeElement.innerHTML == parsePrice(parseFloatHTML(activeElement));
+    if (c === "_qr") {
+      const el = document.getElementById("_qr");
+      if (el) {
+        el.src = valor;
+        el.alt = "QR del equipo";
+        el.style.display = "block";
+      }
+      return;
+    }
 
-	if (!isNaN(value) && (e.keyCode == 38 || e.keyCode == 40 || e.wheelDeltaY)) {
-		e.preventDefault();
+    if (c === "TELCLIENTE") {
+      setTelefonoConIcono("TELCLIENTE", valor);
+      return;
+    }
 
-		value += e.keyCode == 38 ? 1 : e.keyCode == 40 ? -1 : Math.round(e.wheelDelta * 0.025);
-		value = Math.max(value, 0);
+    if (c === "COSTOLPS") {
+      setCostoFormateado("COSTOLPS", valor);
+      return;
+    }
 
-		activeElement.innerHTML = wasPrice ? parsePrice(value) : value;
-	}
+    setText(c, valor);
+  });
 
-	updateInvoice();
-}
+  // ----------------------------
+  // TEXTOCONFORME generado localmente (ya no viaja por URL)
+  // ----------------------------
+  const estado = getParam("ESTADO");
+  const textoConforme = getTextoConformePorEstado(estado);
+  setTextoConSaltos("TEXTOCONFORME", textoConforme);
 
-/* Update Invoice
-/* ========================================================================== */
+  // ----------------------------
+  // Firma (CONFORME) solo si existe
+  // ----------------------------
+  const firmaParam = getParam("CONFORME");
+  const imgFirma = document.getElementById("CONFORME_IMG");
+  if (imgFirma) {
+    if (firmaParam && firmaParam.trim() !== "") {
+      let firmaURL = firmaParam;
 
-function updateInvoice() {
-	var total = 0;
-	var cells, price, total, a, i;
+      // Si la URL es una ruta interna de AppSheet, convertirla a URL pública
+      if (firmaURL.startsWith("PC_Images/") || firmaURL.startsWith("IMPRESORAS_Images/")) {
+        const tabla = firmaURL.startsWith("IMPRESORAS_Images/") ? "IMPRESORAS" : "PC";
+        firmaURL =
+          "https://www.appsheet.com/template/gettablefileurl?" +
+          "appName=TYTOneDBA-909404411" +
+          "&tableName=" + tabla +
+          "&fileName=" + encodeURIComponent(firmaURL);
+      }
 
-	// update inventory cells
-	// ======================
+      imgFirma.src = firmaURL;
+      imgFirma.style.display = "block";
+    } else {
+      imgFirma.style.display = "none";
+    }
+  }
 
-	for (var a = document.querySelectorAll('table.inventory tbody tr'), i = 0; a[i]; ++i) {
-		// get inventory row cells
-		cells = a[i].querySelectorAll('span:last-child');
+  // ----------------------------
+  // Mostrar PW y Garantía
+  // ----------------------------
+  const pwInfo = document.getElementById("pwInfo");
+  if (pwInfo) pwInfo.style.display = "block";
 
-		// set price as cell[2] * cell[3]
-		price = parseFloatHTML(cells[2]) * parseFloatHTML(cells[3]);
+  // ----------------------------
+  // Modo corto
+  // ----------------------------
+  const modo = getParam("modo");
+  if (modo === "corto") {
+    // Oculta secciones grandes
+    hideById("seccionConforme");
+    hideBySelector(".whatsapp"); // QR WhatsApp
+    // Si quieres ocultar "TRABAJO REALIZADO" completo:
+    // hideById("SERVICIOREALIZADO");
+  }
 
-		// add price to total
-		total += price;
+  // ----------------------------
+  // Impresión (solo si print=1)
+  // ----------------------------
+  window.addEventListener("load", () => {
+    const printMode = getParam("print");
+    if (printMode === "1") {
+      setTimeout(() => {
+        try {
+          const esAndroid = /Android/i.test(navigator.userAgent);
+          if (esAndroid) {
+            // Intentar abrir RawBT
+            const rawbtIntent =
+              "intent://print/#Intent;scheme=rawbt;package=ru.a402d.rawbtprinter;end;";
+            const iframe = document.createElement("iframe");
+            iframe.style.display = "none";
+            iframe.src = rawbtIntent;
+            document.body.appendChild(iframe);
 
-		// set row total
-		cells[4].innerHTML = price;
-	}
-
-	// update balance cells
-	// ====================
-
-	// get balance cells
-	cells = document.querySelectorAll('table.balance td:last-child span:last-child');
-
-	// set total
-	cells[0].innerHTML = total;
-
-	// set balance and meta balance
-	cells[2].innerHTML = document.querySelector('table.meta tr:last-child td:last-child span:last-child').innerHTML = parsePrice(total - parseFloatHTML(cells[1]));
-
-	// update prefix formatting
-	// ========================
-
-	var prefix = document.querySelector('#prefix').innerHTML;
-	for (a = document.querySelectorAll('[data-prefix]'), i = 0; a[i]; ++i) a[i].innerHTML = prefix;
-
-	// update price formatting
-	// =======================
-
-	for (a = document.querySelectorAll('span[data-prefix] + span'), i = 0; a[i]; ++i) if (document.activeElement != a[i]) a[i].innerHTML = parsePrice(parseFloatHTML(a[i]));
-}
-
-/* On Content Load
-/* ========================================================================== */
-
-function onContentLoad() {
-	updateInvoice();
-
-	var
-	input = document.querySelector('input'),
-	image = document.querySelector('img');
-
-	function onClick(e) {
-		var element = e.target.querySelector('[contenteditable]'), row;
-
-		element && e.target != document.documentElement && e.target != document.body && element.focus();
-
-		if (e.target.matchesSelector('.add')) {
-			document.querySelector('table.inventory tbody').appendChild(generateTableRow());
-		}
-		else if (e.target.className == 'cut') {
-			row = e.target.ancestorQuerySelector('tr');
-
-			row.parentNode.removeChild(row);
-		}
-
-		updateInvoice();
-	}
-
-	function onEnterCancel(e) {
-		e.preventDefault();
-
-		image.classList.add('hover');
-	}
-
-	function onLeaveCancel(e) {
-		e.preventDefault();
-
-		image.classList.remove('hover');
-	}
-
-	function onFileInput(e) {
-		image.classList.remove('hover');
-
-		var
-		reader = new FileReader(),
-		files = e.dataTransfer ? e.dataTransfer.files : e.target.files,
-		i = 0;
-
-		reader.onload = onFileLoad;
-
-		while (files[i]) reader.readAsDataURL(files[i++]);
-	}
-
-	function onFileLoad(e) {
-		var data = e.target.result;
-
-		image.src = data;
-	}
-
-	if (window.addEventListener) {
-		document.addEventListener('click', onClick);
-
-		document.addEventListener('mousewheel', updateNumber);
-		document.addEventListener('keydown', updateNumber);
-
-		document.addEventListener('keydown', updateInvoice);
-		document.addEventListener('keyup', updateInvoice);
-
-		input.addEventListener('focus', onEnterCancel);
-		input.addEventListener('mouseover', onEnterCancel);
-		input.addEventListener('dragover', onEnterCancel);
-		input.addEventListener('dragenter', onEnterCancel);
-
-		input.addEventListener('blur', onLeaveCancel);
-		input.addEventListener('dragleave', onLeaveCancel);
-		input.addEventListener('mouseout', onLeaveCancel);
-
-		input.addEventListener('drop', onFileInput);
-		input.addEventListener('change', onFileInput);
-	}
-}
-
-window.addEventListener && document.addEventListener('DOMContentLoaded', onContentLoad);
+            // Si RawBT no responde, usar impresión normal
+            setTimeout(() => window.print(), 1500);
+          } else {
+            window.print();
+          }
+        } catch (err) {
+          console.error("Error al imprimir:", err);
+          window.print();
+        }
+      }, 1000); // esperar para cargar imágenes y QR
+    }
+  });
+})();
